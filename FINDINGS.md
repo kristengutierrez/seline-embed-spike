@@ -2,6 +2,12 @@
 
 Spike date: 2026-07-12. Timeboxed, single session.
 
+> **FINAL DECISION (2026-07-12): live content dropped entirely; nothing ships that touches this wall.**
+> See [Final decision](#final-decision) at the bottom. The verdict below stands, but the product was
+> re-scoped so the wall no longer constrains it: no guest-facing countdown, no guest-facing RSVP count.
+> The invite ships as a static Canva template + an RSVP button that links out to a Google Form
+> (responses tracked privately in the couple's own Google Sheet). No embed, no Iframely, no gatekeeper.
+
 ## TL;DR verdict
 
 **No, not for an unlisted domain** — and this is a hard technical wall, not a markup problem.
@@ -226,3 +232,39 @@ domain, and no off-the-shelf service offers that guest-facing view.
   blocked, and this teardown confirms *nobody* ships it — not for lack of imagination, but because the
   Iframely wall stops everyone identically. Pursuing it means becoming a whitelisted host yourself,
   which reopens the third-party-approval dependency the spike was trying to avoid. Decision: **dropped.**
+
+## Final decision
+
+After the teardown, we evaluated the two guest-facing dynamic elements individually and dropped both.
+Net result: **the product ships with no live/embedded content, so the Iframely/Canva wall documented
+above no longer constrains it.** The spike's "no" answer costs nothing because everything that needed
+a "yes" was scoped out.
+
+Decisions and reasoning:
+
+- **Guest-facing RSVP count ("24 of 40 replied", who's-coming list) — dropped.** Not wanted; guests
+  shouldn't see the running count. RSVP is host-facing only. Verified in passing that a *published
+  Google Sheet* (`docs.google.com/spreadsheets/d/e/.../pubhtml`) **does** resolve through Iframely into
+  a live iframe (`rel: ["file","reader","ssl","html5"]`) — so the Google-domain workaround genuinely
+  clears the wall if a guest-facing live view is ever wanted again. Not needed now.
+- **Guest-facing live countdown — dropped.** Two viable wall-clearing paths were confirmed and both
+  rejected:
+  - *Google Sheet workaround*: technically works (published Sheet → live iframe) but makes a poor
+    countdown — no smooth tick (published `pubhtml` refreshes on Google's ~5-min cadence, only on
+    reload), day-granularity ceiling, and renders as a spreadsheet cell.
+  - *TickCounter* (whitelisted; verified `https://www.tickcounter.com/widget/countup/17207` →
+    `rel: ["oembed","app","allow","ssl","html5"]`, real live iframe): ticks properly, free, zero build,
+    and is what competitor listings use — but **rejected on aesthetics (looks tacky), not capability.**
+- **RSVP collection — kept, host-facing only.** RSVP button is a plain hyperlink to a Google Form;
+  responses land in the couple's private Google Sheet. No embed, no whitelist, no Iframely, no Canva
+  app review. Works on a published Canva site today.
+
+### What ships
+
+Static Canva invite suite (buyer copies → customizes → publishes → shares link) + an RSVP button
+linking out to a Google Form. This is the most robust version available: it dodges **both** third-party
+gatekeepers the spike surfaced (Iframely's whitelist queue *and* the Canva Apps marketplace-review
+path), and there is no live layer to silently break on a guest's phone months after publish. The
+"buyer edits it themselves in Canva" delivery model is fully preserved.
+
+Spike closed.
