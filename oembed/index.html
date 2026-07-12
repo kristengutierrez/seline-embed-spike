@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Embed Spike — H1 (oEmbed discovery)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="alternate" type="application/json+oembed"
+      href="https://kristengutierrez.github.io/seline-embed-spike/oembed.json"
+      title="Seline Paperie Embed Spike — Live Widget">
+<style>
+  body{font-family:ui-sans-serif,system-ui,sans-serif;max-width:600px;margin:40px auto;padding:0 16px;line-height:1.5}
+  code{background:#eee;padding:2px 5px;border-radius:3px}
+</style>
+</head>
+<body>
+<h1>H1: oEmbed discovery</h1>
+<p>This page carries a standards-compliant oEmbed discovery link in <code>&lt;head&gt;</code>:</p>
+<pre>&lt;link rel="alternate" type="application/json+oembed" href=".../oembed.json"&gt;</pre>
+<p>The referenced <a href="/seline-embed-spike/oembed.json">oembed.json</a> declares
+<code>type: "rich"</code> and returns an <code>&lt;iframe&gt;</code> pointing at
+<a href="/seline-embed-spike/widget/">/widget</a>.</p>
+</body>
+</html>

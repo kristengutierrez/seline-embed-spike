@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "type": "rich",
+  "provider_name": "Seline Paperie Embed Spike",
+  "provider_url": "https://kristengutierrez.github.io/seline-embed-spike/",
+  "title": "Live Widget Test (H1 oEmbed)",
+  "html": "<iframe src=\"https://kristengutierrez.github.io/seline-embed-spike/widget/\" width=\"400\" height=\"300\" frameborder=\"0\" scrolling=\"no\" style=\"border:none;\"></iframe>",
+  "width": 400,
+  "height": 300
+}
