@@ -175,3 +175,54 @@ roughly ascending in cost/control:
    Etsy buyers. A hybrid (Canva for the static invite suite, a separate hosted page just for the
    RSVP/countdown block, linked or QR-coded from the Canva site) is the least disruptive version of this
    and doesn't depend on Canva's embed pipeline at all.
+
+## Competitive teardown — how existing Etsy listings do "live" content (2026-07-12)
+
+Follow-up research after the technical spike, to answer "if the wall is real, how do the dozens of
+Etsy listings advertising *live countdown + trackable RSVP* on Canva sites pull it off?" Answer: they
+do exactly what this spike concluded is the only viable path — **they wire the Canva page to
+third-party services that are already on Iframely's whitelist. None of them self-host anything.** Every
+mechanism below was verified against the whitelist file (`iframe.ly/domains.json`) pulled in Phase B.
+
+### Countdown → embed a whitelisted countdown service
+
+Tutorials universally point to [TickCounter](https://www.tickcounter.com) (or svgcountdowns). Both
+are whitelisted, so both render as a live iframe that ticks and survives publish — *because the src is
+their domain, not the seller's*:
+
+```
+^https?://(?:www\.)?tickcounter\.com     ✓ whitelisted
+^https?://(?:www\.)?svgcountdowns\.com    ✓ whitelisted
+```
+
+Canva's *own* countdown element, by contrast, flattens to a frozen PNG on export — the same trap that
+killed the original countdown-sticker feature.
+
+### RSVP → three patterns, all avoiding self-hosting
+
+1. **Link-out button (most common):** the "RSVP" button is a plain hyperlink to a Google Form, opens
+   in a new tab; responses land in Google Sheets. "Trackable" = *the couple* reads the sheet. Nothing
+   is embedded, so the flattening problem never applies — a link is not embedded content.
+2. **Embedded whitelisted form provider:** paste a Jotform / Typeform / Tally / Cognito / Google Form
+   URL into Canva's Embed element. All whitelisted → render as live in-page iframes:
+   `jotform.com ✓  typeform.com ✓  cognitoforms.com ✓  wufoo ✓  paperform.co ✓  docs.google.com/forms ✓`
+3. **Purpose-built service:** [ouRSVP](https://www.oursvp.app) — a Canva App *and* a whitelisted
+   domain (`oursvp.app ✓`) built specifically for Canva RSVP.
+
+### The part that matters for the moat
+
+Everything above collects RSVPs into a **couple-facing** dashboard/sheet. **None of it shows guests
+live, server-backed aggregate state** — no "24 of 40 replied," no who's-coming list rendered on the
+published page for a logged-out guest. That specific product does not exist among these listings, and
+the reason is this exact wall: to show guest-visible live data you'd have to *be* the whitelisted
+domain, and no off-the-shelf service offers that guest-facing view.
+
+### Why we dropped it
+
+- **The achievable 80%** (live countdown + working RSVP collection) is already commoditized. Seline
+  Paperie can match every competitor with zero backend — just document "embed TickCounter, link a
+  Jotform" in the listing. No moat, but no build either.
+- **The true moat** (guest-visible live status / who's-coming) is precisely what the spike proved is
+  blocked, and this teardown confirms *nobody* ships it — not for lack of imagination, but because the
+  Iframely wall stops everyone identically. Pursuing it means becoming a whitelisted host yourself,
+  which reopens the third-party-approval dependency the spike was trying to avoid. Decision: **dropped.**
